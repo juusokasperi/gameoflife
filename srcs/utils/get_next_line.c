@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 21:26:33 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 14:39:00 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 17:12:08 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static char	*read_buffer(int fd, char *new_line, char *buffer)
 			return (NULL);
 	}
 	nb_read = 1;
-	while (!new_line || strchr(new_line, '\n'))
+	while (!new_line || !strchr(new_line, '\n'))
 	{
 		nb_read = read(fd, buffer, BUFFER_SIZE);
 		if (nb_read <= 0)
