@@ -28,7 +28,7 @@ OBJS_DIR = .objs/$(BUILD)/
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
 
 DEPS_DIR = .deps/$(BUILD)/
-DEPS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.d))
+DEPS = $(addprefix $(DEPS_DIR), $(SRCS:.c=.d))
 
 CC = cc
 
@@ -54,11 +54,11 @@ $(NAME): $(OBJS)
 
 clean:
 	@rm -rf $(OBJS_DIR) $(DEPS_DIR)
-	@echo "$(RED) $(NAME): Clean complete.$(END)"
+	@echo "$(RED)✅ $(NAME): Clean complete.$(END)"
 
 fclean:
 	@rm -rf .objs/ .deps/ life life_optimized
-	@echo "$(RED) $(NAME): Fclean complete.$(END)"
+	@echo "$(RED)✅ $(NAME): Fclean complete.$(END)"
 
 re: fclean all
 
