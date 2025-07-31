@@ -1,3 +1,16 @@
+BASEFLAGS = -Wall -Wextra -Werror $(INCS) -MMD -MP
+
+ifneq (,$(filter optimize%,$(MAKECMDGOALS)))
+	BUILD = optimized
+	NAME = life_optimized
+	CFLAGS = $(BASEFLAGS) -O3 -march=native \
+	-mtune=native -fomit-frame-pointer -DNDEBUG -flto
+else
+	BUILD = normal
+	NAME = life
+	CFLAGS = $(BASEFLAGS)
+endif
+
 SRCS =	main.c							\
 		play.c							\
 		prepare/state_validation.c		\
@@ -11,14 +24,13 @@ SRCS =	main.c							\
 
 SRCS_DIR = srcs/
 
-OBJS_DIR = .objs/
+OBJS_DIR = .objs/$(BUILD)/
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
 
-DEPS_DIR = .deps/
+DEPS_DIR = .deps/$(BUILD)/
 DEPS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.d))
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(INCS) -MMD -MP
 
 INCS = -I./incs/
 
@@ -26,12 +38,12 @@ GREEN = \033[0;32m
 RED = \033[0;31m
 END = \033[0m
 
-NAME = life
-
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@mkdir -p $(dir $@) $(dir $(DEPS_DIR)$*)
 	@$(CC) $(CFLAGS) -c $< -o $@ -MF $(DEPS_DIR)$*.d
 
+optimize: $(NAME)
+optimize-clean: clean
 all: $(NAME)
 
 $(NAME): $(OBJS)
@@ -45,9 +57,9 @@ clean:
 	@echo "$(RED) $(NAME): Clean complete.$(END)"
 
 fclean:
-	@rm -rf $(OBJS_DIR) $(DEPS_DIR) $(NAME)
+	@rm -rf .objs/ .deps/ life life_optimized
 	@echo "$(RED) $(NAME): Fclean complete.$(END)"
 
 re: fclean all
 
-.PHONY: clean fclean re all
+.PHONY: clean fclean re all optimize optimize-clean
