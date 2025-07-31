@@ -42,9 +42,9 @@ $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@mkdir -p $(dir $@) $(dir $(DEPS_DIR)$*)
 	@$(CC) $(CFLAGS) -c $< -o $@ -MF $(DEPS_DIR)$*.d
 
+all: $(NAME)
 optimize: $(NAME)
 optimize-clean: clean
-all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(INCS) -o $(NAME)
