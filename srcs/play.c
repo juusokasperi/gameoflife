@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:21:38 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 18:16:43 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 01:28:27 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,36 @@
 static int8_t	count_live_neighbors(int y, int x, t_state *state);
 static void 	calculate_next(t_state *state);
 
+static t_star*		generate_stars(t_star *stars, int32_t width, int32_t height)
+{
+	for (int i = 0; i < STAR_COUNT; ++i)
+	{
+		stars[i].x = GetRandomValue(0, width);
+		stars[i].y = GetRandomValue(0, height);
+	}
+	return (stars);
+}
+
 /*
 	Iterates through the game n times as specified by the user.
 */
 void	play_game(t_state *state, int32_t iterations)
 {
-	if (iterations == 0)
-	{
-		print_state(state);
-		return;
-	}
-	for (int32_t i = 0; i < iterations; ++i)
+	int32_t width = state->width * state->cell_size;
+	int32_t height = state->height * state->cell_size;
+	t_star stars[STAR_COUNT];
+
+	generate_stars(stars, width, height);
+	for (int32_t i = 0; i < iterations && !WindowShouldClose(); ++i)
 	{
 		calculate_next(state);
 		uint64_t **tmp = state->current_map;
 		state->current_map = state->next_map;
 		state->next_map = tmp;
-		printf("\033[2J\033[H\n");
-		print_state(state);
-		ft_usleep(100);
+		draw_state(state, stars, width, height);
 	}
+	while (!WindowShouldClose())
+		draw_state(state, stars, width, height);
 }
 
 static int8_t	count_live_neighbors(int y, int x, t_state *state)

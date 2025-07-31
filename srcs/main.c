@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 11:59:18 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 17:14:43 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 00:34:18 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,13 @@ int	main(int argc, char **argv)
 	basic_validation(argc, argv, &fd, &iterations);
 	gettimeofday(&start, NULL);
 	prepare_state(&state, fd);
+	prepare_window(&state);
 	play_game(&state, iterations);
 	free_array(&state);
 	gettimeofday(&end, NULL);
+	CloseWindow();
 	elapsed_time(&start, &end);
+	return (0);
 }
 
 /*

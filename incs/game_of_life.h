@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:18:53 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 18:01:12 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 01:27:35 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,23 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <sys/time.h>
+#include "raylib.h"
 
 #define	GET_CELL(map, y, x) (((map)[(y)][(x) / 64] >> ((x) % 64)) & 1ULL)
 #define	SET_CELL(map, y, x) ((map)[(y)][(x) / 64] |= (1ULL << ((x) % 64)))
 #define	CLEAR_CELL(map, y, x) ((map)[(y)][(x) / 64] &= ~(1ULL << ((x) % 64)))
 #define TOGGLE_CELL(map, y, x) ((map[(y)][(x) / 64]) ^= (1ULL << ((x) % 64)))
 
+#define STAR_COUNT 100
+
 #define ON "\033[0;97mX\033[0m"
 #define OFF "\033[0;34m.\033[0m"
+
+typedef struct	s_star
+{
+	int32_t	x;
+	int32_t	y;
+}	t_star;
 
 typedef struct	s_state
 {
@@ -36,6 +45,7 @@ typedef struct	s_state
 	uint64_t **next_map;
 	uint32_t width;
 	uint32_t height;
+	uint32_t cell_size;
 }	t_state;
 
 int32_t	check_valid_iterations(const char *iterations);
@@ -51,5 +61,10 @@ int		check_file_open(const char *initial_state);
 void	free_array(t_state *state);
 void	free_map(uint64_t **map, int32_t i);
 void	ft_usleep(size_t ms);
+
+//		Raylib:
+
+void draw_state(t_state *state, t_star *stars, int32_t width, int32_t height);
+void prepare_window(t_state *state);
 
 #endif /* GAME_OF_LIFE_H */
