@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:16:02 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 15:05:44 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 18:14:34 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	check_size_and_validness(t_state *state, int32_t fd)
 		ft_free((void **)&line);
 		if (line_width == -1 || line_width != (int64_t)state->width)
 		{
-			char *err;
+			const char *err;
 			if (line_width == -1)
 				err = "Error: Map can only contain characters '.' and 'X'.\n";
 			else
