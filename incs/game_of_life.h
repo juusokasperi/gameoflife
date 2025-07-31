@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:18:53 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 17:24:19 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 18:01:12 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 #define	SET_CELL(map, y, x) ((map)[(y)][(x) / 64] |= (1ULL << ((x) % 64)))
 #define	CLEAR_CELL(map, y, x) ((map)[(y)][(x) / 64] &= ~(1ULL << ((x) % 64)))
 #define TOGGLE_CELL(map, y, x) ((map[(y)][(x) / 64]) ^= (1ULL << ((x) % 64)))
+
+#define ON "\033[0;97mX\033[0m"
+#define OFF "\033[0;34m.\033[0m"
 
 typedef struct	s_state
 {
