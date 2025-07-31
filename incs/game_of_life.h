@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:18:53 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 15:26:54 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 16:04:10 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <fcntl.h>
 #include <ctype.h>
 #include <stdint.h>
+#include <sys/time.h>
 
 #define	GET_CELL(map, y, x) (((map)[(y)][(x) / 64] >> ((x) % 64)) & 1ULL)
 #define	SET_CELL(map, y, x) ((map)[(y)][(x) / 64] |= (1ULL << ((x) % 64)))
