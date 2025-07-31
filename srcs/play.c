@@ -6,14 +6,14 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:21:38 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 15:28:30 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 17:49:24 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game_of_life.h"
 
-static int8_t	count_live_neighbors(uint64_t **map, int y, int x, t_state *state);
-static void calculate_next(uint64_t **current_map, uint64_t **next_map, t_state *state);
+static int8_t	count_live_neighbors(int y, int x, t_state *state);
+static void calculate_next(t_state *state);
 
 /*
 	Iterates through the game n times as specified by the user.
@@ -22,14 +22,14 @@ void	play_game(t_state *state, int32_t iterations)
 {
 	for (int32_t i = 0; i < iterations; ++i)
 	{
-		calculate_next(state->current_map, state->next_map, state);
+		calculate_next(state);
 		uint64_t **tmp = state->current_map;
 		state->current_map = state->next_map;
 		state->next_map = tmp;
 	}
 }
 
-static int8_t	count_live_neighbors(uint64_t **map, int y, int x, t_state *state)
+static int8_t	count_live_neighbors(int y, int x, t_state *state)
 {
 	int32_t	count = 0;
 	for (int32_t dy = -1; dy <= 1; ++dy)
@@ -41,19 +41,22 @@ static int8_t	count_live_neighbors(uint64_t **map, int y, int x, t_state *state)
 			int32_t ny = y + dy;
 			int32_t nx = x + dx;
 			if (ny >= 0 && ny < (int32_t)state->height && nx >= 0 && nx < (int32_t)state->width)
-				count += GET_CELL(map, ny, nx);
+				count += GET_CELL(state->current_map, ny, nx);
 		}
 	}
 	return (count);
 }
 
-static void calculate_next(uint64_t **current_map, uint64_t **next_map, t_state *state)
+static void calculate_next(t_state *state)
 {
+	uint64_t **current_map = state->current_map;
+	uint64_t **next_map = state->next_map;
+
 	for (uint32_t y = 0; y < state->height; ++y)
 	{
 		for (uint32_t x = 0; x < state->width; ++x)
 		{
-			int8_t	neighbors = count_live_neighbors(current_map, y, x, state);
+			int8_t	neighbors = count_live_neighbors(y, x, state);
 			if (GET_CELL(current_map, y, x))
 			{
 				if (neighbors == 2 || neighbors == 3)
