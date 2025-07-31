@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:18:53 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 16:04:10 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 17:24:19 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ void	invalid_format(const char *binary_name);
 int		check_file_open(const char *initial_state);
 void	free_array(t_state *state);
 void	free_map(uint64_t **map, int32_t i);
+void	ft_usleep(size_t ms);
 
 #endif /* GAME_OF_LIFE_H */

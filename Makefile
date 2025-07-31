@@ -20,7 +20,8 @@ SRCS =	main.c							\
 		utils/free_array.c				\
 		utils/ft_free.c					\
 		utils/get_next_line.c			\
-		utils/print_state.c
+		utils/print_state.c				\
+		utils/ft_usleep.c
 
 SRCS_DIR = srcs/
 
@@ -42,9 +43,9 @@ $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@mkdir -p $(dir $@) $(dir $(DEPS_DIR)$*)
 	@$(CC) $(CFLAGS) -c $< -o $@ -MF $(DEPS_DIR)$*.d
 
+all: $(NAME)
 optimize: $(NAME)
 optimize-clean: clean
-all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(INCS) -o $(NAME)

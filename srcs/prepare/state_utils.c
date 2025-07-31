@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:34:04 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 15:28:04 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 17:27:27 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ int32_t	check_valid_iterations(const char *iterations)
 		}
 	}
 	value = strtol(iterations, NULL, 10);
-	if (value < 0 || value > INT32_MAX)
+	if (value < 0 || value > 1000)
 	{
-		const char *err = "Error: Invalid iterations (0-2147483647)";
+		const char *err = "Error: Invalid iterations (0-1000)\n";
 		write(STDERR_FILENO, err, strlen(err));
 		exit(1);
 	}

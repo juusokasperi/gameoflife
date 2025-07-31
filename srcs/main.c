@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 11:59:18 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 16:38:21 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 17:14:43 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	main(int argc, char **argv)
 	gettimeofday(&start, NULL);
 	prepare_state(&state, fd);
 	play_game(&state, iterations);
-	print_state(&state);
 	free_array(&state);
 	gettimeofday(&end, NULL);
 	elapsed_time(&start, &end);

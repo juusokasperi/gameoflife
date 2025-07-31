@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:21:38 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 15:28:30 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 17:26:37 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ void	play_game(t_state *state, int32_t iterations)
 		uint64_t **tmp = state->current_map;
 		state->current_map = state->next_map;
 		state->next_map = tmp;
+		printf("\033[2J\033[H\n");
+		print_state(state);
+		ft_usleep(100);
 	}
 }
 
