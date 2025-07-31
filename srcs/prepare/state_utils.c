@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:34:04 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 17:27:27 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 18:18:06 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,16 @@ int32_t	check_file_open(const char *initial_state)
 int32_t	check_valid_iterations(const char *iterations)
 {
 	long	value;
-	int32_t	i = -1;
+	char	*endptr = NULL;
 
-	while (iterations[++i])
+	value = strtol(iterations, &endptr, 10);
+	if (endptr == iterations || *endptr != '\0' || value < 0 || value > INT32_MAX)
 	{
-		if (!isdigit(iterations[i]))
-		{
-			const char *err = "Error: Iterations must contain only digits.\n";
-			write(STDERR_FILENO, err, strlen(err));
-			exit(1);
-		}
-	}
-	value = strtol(iterations, NULL, 10);
-	if (value < 0 || value > 1000)
-	{
-		const char *err = "Error: Invalid iterations (0-1000)\n";
+		const char *err;
+		if (value < 0 || value > 1000)
+			err = "Error: Invalid iterations (0-1000)\n";
+		else if (*endptr != '\0')
+			err = "Error: Invalid character in iterations field\n";
 		write(STDERR_FILENO, err, strlen(err));
 		exit(1);
 	}

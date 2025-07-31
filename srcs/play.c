@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:21:38 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 17:48:16 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/07/31 18:16:43 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ static void 	calculate_next(t_state *state);
 */
 void	play_game(t_state *state, int32_t iterations)
 {
+	if (iterations == 0)
+	{
+		print_state(state);
+		return;
+	}
 	for (int32_t i = 0; i < iterations; ++i)
 	{
 		calculate_next(state);
