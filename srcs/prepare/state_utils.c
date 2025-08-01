@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:34:04 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 18:18:06 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 14:08:47 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@
 void	invalid_format(const char *binary_name)
 {
 	const char *usage = "Usage: ";
-	const char *state_iterations = " <initial_state> <iterations>\n";
+	const char *state_iterations = " <initial_state> <iterations> <optional h/r/s\n";
+	const char *explanation = "h: B36/S23, r: B1357/S1357, s: B2/S\n";
 	write(STDERR_FILENO, usage, strlen(usage));
 	write(STDERR_FILENO, binary_name, strlen(binary_name));
 	write(STDERR_FILENO, state_iterations, strlen(state_iterations));
+	write(STDERR_FILENO, explanation, strlen(explanation));
 	exit(1);
 }
 
@@ -69,6 +71,17 @@ int32_t	check_valid_iterations(const char *iterations)
 		exit(1);
 	}
 	return (value);
+}
+
+char	check_valid_ruleset(const char *ruleset)
+{
+	if (strlen(ruleset) != 1 || (ruleset[0] != 'r' && ruleset[0] != 'h' && ruleset[0] != 's'))
+	{
+		const char *err = "Error: Invalid ruleset (r/h/s)\n";
+		write(STDERR_FILENO, err, strlen(err));
+		exit(1);
+	}
+	return (ruleset[0]);
 }
 
 void	free_map(uint64_t **map, int32_t i)

@@ -13,6 +13,7 @@ endif
 
 SRCS =	main.c							\
 		play.c							\
+		handle_cells.c					\
 		raylib_utils.c					\
 		prepare/state_validation.c		\
 		prepare/state_memory.c			\

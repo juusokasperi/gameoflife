@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 11:59:18 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 13:04:28 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 14:23:27 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,19 @@
 
 static void	prepare_state(t_state *state, int32_t fd);
 static void	elapsed_time(struct timeval *start, struct timeval *end);
-static void	basic_validation(int argc, char **argv, int32_t *fd, int32_t *iterations);
+static void	basic_validation(int argc, char **argv, int32_t *fd,
+		int32_t *iterations, char *ruleset);
 
 int	main(int argc, char **argv)
 {
 	t_state	state;
 	int32_t	iterations;
 	int32_t	fd;
+	char	ruleset;
 	struct timeval start, end;
 
-	basic_validation(argc, argv, &fd, &iterations);
+	basic_validation(argc, argv, &fd, &iterations, &ruleset);
+	state.ruleset = ruleset;
 	gettimeofday(&start, NULL);
 	prepare_state(&state, fd);
 	prepare_window(&state);
@@ -39,11 +42,16 @@ int	main(int argc, char **argv)
 	Checks that the program is called with right amount of arguments,
 	the iterations is a valid integer and the initial_state is a readable file.
 */
-static void	basic_validation(int argc, char **argv, int32_t *fd, int32_t *iterations)
+static void	basic_validation(int argc, char **argv, int32_t *fd,
+		int32_t *iterations, char *ruleset)
 {
-	if (argc != 3)
+	if (argc < 3 || argc > 4)
 		invalid_format(argv[0]);
 	*iterations = check_valid_iterations(argv[2]);
+	if (argc == 4)
+		*ruleset = check_valid_ruleset(argv[3]);
+	else
+		*ruleset = 'd';
 	*fd = check_file_open(argv[1]);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:21:38 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 13:52:18 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 14:20:14 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,20 +67,14 @@ static void calculate_next(t_state *state)
 		for (uint32_t x = 0; x < state->width; ++x)
 		{
 			int8_t	neighbors = count_live_neighbors(y, x, state);
-			if (GET_CELL(current_map, y, x))
-			{
-				if (neighbors == 2 || neighbors == 3)
-					SET_CELL(next_map, y, x);
-				else
-					CLEAR_CELL(next_map, y, x);
-			}
-			else
-			{
-				if (neighbors == 3)
-					SET_CELL(next_map, y, x);
-				else
-					CLEAR_CELL(next_map, y, x);
-			}
+			if (state->ruleset == 'd')
+				handle_default(current_map, next_map, y, x, neighbors);
+			else if (state->ruleset == 'r')
+				handle_replicator(current_map, next_map, y, x, neighbors);
+			else if (state->ruleset == 's')
+				handle_seeds(current_map, next_map, y, x, neighbors);
+			else if (state->ruleset == 'h')
+				handle_highlife(current_map, next_map, y, x, neighbors);
 		}
 	}
 }
