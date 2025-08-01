@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:21:38 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 17:07:50 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 18:30:17by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,37 @@ static t_star*	generate_stars(t_star *stars);
 */
 void	play_game(t_state *state, int32_t iterations)
 {
-	t_star stars[STAR_COUNT];
+	bool	keys_toggle = false;
+	bool	is_paused = false;
+	t_star	stars[STAR_COUNT];
+	int32_t	i = 0;
+	Font inconsolata = LoadFont("./font/inconsolata.ttf");
 
 	generate_stars(stars);
-	for (int32_t i = 0; i < iterations && !WindowShouldClose(); ++i)
-	{
-		calculate_next(state);
-		uint64_t **tmp = state->current_map;
-		state->current_map = state->next_map;
-		state->next_map = tmp;
-		draw_state(state, stars);
-	}
-	printf("%d iterations done.\n", iterations);
 	while (!WindowShouldClose())
-		draw_state(state, stars);
+	{
+		if (IsKeyPressed(KEY_P))
+			is_paused = true;
+		if (IsKeyPressed(KEY_C))
+			is_paused = false;
+		if (IsKeyReleased(KEY_T))
+			keys_toggle = !keys_toggle;
+		draw_state(state, stars, keys_toggle, inconsolata);
+		if (is_paused)
+			toggle_cells(state);
+		if (!is_paused && i < iterations)
+		{
+			calculate_next(state);
+			swap_maps(state);
+			i++;
+		}
+		else if (!is_paused && i == iterations)
+		{
+			printf("%d iterations done.\n", iterations);
+			i++;
+		}
+	}
+	UnloadFont(inconsolata);
 }
 
 static char	count_live_neighbors(int y, int x, t_state *state)

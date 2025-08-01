@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 23:54:47 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 17:09:33 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/02 01:23:31y jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ void prepare_window(t_state *state)
 	uint32_t	screen_height = height * state->cell_size;
 
 	SetConfigFlags(FLAG_WINDOW_HIGHDPI);
-	InitWindow(screen_width, screen_height, "Game of Life");
+	InitWindow(screen_width, screen_height, "Game of Life (T: Toggle Keys)");
 	SetTargetFPS(10);
 	printf("Screen size: %dx%d\t| Grid size:%dx%d\t| Cell_size %d\t| Ruleset: B%s/S%s\n",
 		screen_width, screen_height, width, height, state->cell_size,
 		state->cell_born, state->cell_alive);
 }
 
-void draw_state(t_state *state, t_star *stars)
+void draw_state(t_state *state, t_star *stars, bool key_toggle, Font font)
 {
 	int32_t	screen_width = GetScreenWidth();
 	int32_t screen_height = GetScreenHeight();
@@ -82,5 +82,25 @@ void draw_state(t_state *state, t_star *stars)
 			}
 		}
 	}
+	if (key_toggle)
+		DrawTextEx(font, "P: Pause iterations, C: Continue iterations\n" "Click on cells to toggle ON/OFF", (Vector2){ 10, screen_height - 50 }, 18, 1, YELLOW);
 	EndDrawing();
+}
+
+void	toggle_cells(t_state *state)
+{
+	Vector2 mouse = GetMousePosition();
+	int32_t grid_x = (int32_t)mouse.x / state->cell_size;
+	int32_t grid_y = (int32_t)mouse.y / state->cell_size;
+	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)
+		&& grid_x >= 0 && grid_x < (int32_t)state->width
+		&& grid_y >= 0 && grid_y < (int32_t)state->height)
+		TOGGLE_CELL(state->current_map, grid_y, grid_x);
+}
+
+void	swap_maps(t_state *state)
+{
+	uint64_t **tmp = state->current_map;
+	state->current_map = state->next_map;
+	state->next_map = tmp;
 }

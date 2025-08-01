@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:18:53 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 17:30:07 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/02 01:28:35 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ void	free_array(t_state *state);
 void	free_map(uint64_t **map, int32_t i);
 void	ft_usleep(size_t ms);
 
-void draw_state(t_state *state, t_star *stars);
+void draw_state(t_state *state, t_star *stars, bool key_toggle, Font font);
 void prepare_window(t_state *state);
+void	toggle_cells(t_state *state);
+void	swap_maps(t_state *state);
 
 #endif /* GAME_OF_LIFE_H */
