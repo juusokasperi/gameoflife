@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 23:54:47 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 14:22:58 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 17:09:33 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,9 @@ void prepare_window(t_state *state)
 	SetConfigFlags(FLAG_WINDOW_HIGHDPI);
 	InitWindow(screen_width, screen_height, "Game of Life");
 	SetTargetFPS(10);
-	printf("Screen size: %dx%d\t| Grid size:%dx%d\t| Cell_size %d\t| Ruleset: ", screen_width, screen_height, width, height, state->cell_size);
-	if (state->ruleset == 'h')
-		printf("B36/S23\n");
-	else if (state->ruleset == 'r')
-		printf("B1357/S1357\n");
-	else if (state->ruleset == 's')
-		printf("B2/S\n");
-	else
-		printf("B3/S23\n");
+	printf("Screen size: %dx%d\t| Grid size:%dx%d\t| Cell_size %d\t| Ruleset: B%s/S%s\n",
+		screen_width, screen_height, width, height, state->cell_size,
+		state->cell_born, state->cell_alive);
 }
 
 void draw_state(t_state *state, t_star *stars)

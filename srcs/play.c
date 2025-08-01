@@ -6,13 +6,15 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:21:38 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 14:20:14 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 17:07:50 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game_of_life.h"
 
-static int8_t	count_live_neighbors(int y, int x, t_state *state);
+//	Default B3/S23, Replicator B1357/S1357, Seeds B2/S, HighLife B36/S23
+
+static char		count_live_neighbors(int y, int x, t_state *state);
 static void		calculate_next(t_state *state);
 static t_star*	generate_stars(t_star *stars);
 
@@ -37,7 +39,7 @@ void	play_game(t_state *state, int32_t iterations)
 		draw_state(state, stars);
 }
 
-static int8_t	count_live_neighbors(int y, int x, t_state *state)
+static char	count_live_neighbors(int y, int x, t_state *state)
 {
 	int32_t	count = 0;
 
@@ -54,7 +56,7 @@ static int8_t	count_live_neighbors(int y, int x, t_state *state)
 				count += GET_CELL(state->current_map, ny, nx);
 		}
 	}
-	return (count);
+	return (count + '0');
 }
 
 static void calculate_next(t_state *state)
@@ -66,15 +68,21 @@ static void calculate_next(t_state *state)
 	{
 		for (uint32_t x = 0; x < state->width; ++x)
 		{
-			int8_t	neighbors = count_live_neighbors(y, x, state);
-			if (state->ruleset == 'd')
-				handle_default(current_map, next_map, y, x, neighbors);
-			else if (state->ruleset == 'r')
-				handle_replicator(current_map, next_map, y, x, neighbors);
-			else if (state->ruleset == 's')
-				handle_seeds(current_map, next_map, y, x, neighbors);
-			else if (state->ruleset == 'h')
-				handle_highlife(current_map, next_map, y, x, neighbors);
+			char neighbors = count_live_neighbors(y, x, state);
+			if (GET_CELL(current_map, y, x))
+			{
+				if (strchr(state->cell_alive, neighbors))
+					SET_CELL(next_map, y, x);
+				else
+					CLEAR_CELL(next_map, y, x);
+			}
+			else
+			{
+				if (strchr(state->cell_born, neighbors))
+					SET_CELL(next_map, y, x);
+				else
+					CLEAR_CELL(next_map, y, x);
+			}
 		}
 	}
 }

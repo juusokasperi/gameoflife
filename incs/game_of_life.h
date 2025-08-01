@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:18:53 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 14:20:37 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 17:30:07 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,25 +52,17 @@ typedef struct	s_state
 	uint32_t	width;
 	uint32_t	height;
 	uint32_t	cell_size;
-	char		ruleset;
+	char		cell_born[10];
+	char		cell_alive[10];
 }	t_state;
 
 int32_t	check_valid_iterations(const char *iterations);
-char	check_valid_ruleset(const char *ruleset);
+void	check_valid_ruleset(const char *input, char *cell);
 void	check_size_and_validness(t_state *state, int32_t fd);
 void	allocate_memory(t_state *state, int32_t fd);
 void	initial_to_struct(t_state *state, int32_t fd,
 		int32_t original_width, int32_t original_height);
 void	play_game(t_state *state, int32_t iterations);
-
-void	handle_default(uint64_t **current_map, uint64_t **next_map,
-		uint32_t y, uint32_t x, int8_t neighbors);
-void	handle_replicator(uint64_t **current_map, uint64_t **next_map,
-		uint32_t y, uint32_t x, int8_t neighbors);
-void	handle_seeds(uint64_t **current_map, uint64_t **next_map,
-		uint32_t y, uint32_t x, int8_t neighbors);
-void	handle_highlife(uint64_t **current_map, uint64_t **next_map,
-		uint32_t y, uint32_t x, int8_t neighbors);
 
 void	*ft_free(void **ptr);
 void	fd_to_start(int32_t fd);
