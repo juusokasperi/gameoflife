@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:21:38 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 13:24:39 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 13:52:18 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,12 @@ static void calculate_next(t_state *state)
 
 static t_star*		generate_stars(t_star *stars)
 {
-	int32_t	screen_width = GetScreenWidth();
-	int32_t	screen_height = GetScreenHeight();
+	int32_t			screen_width = GetScreenWidth();
+	int32_t			screen_height = GetScreenHeight();
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	SetRandomSeed((unsigned int)(tv.tv_sec ^ tv.tv_usec));
 
 	for (int i = 0; i < STAR_COUNT; ++i)
 	{
