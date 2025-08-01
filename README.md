@@ -20,3 +20,5 @@
 
 `raylib-print`
 - Similar to print-iterations, but uses the `Raylib` graphical library to create a nicer output.
+- This branch also supports different transition rules - the binary accepts one more argument, `./life(_optimized) <initial_state> <iterations> <optional rule: s/r/h>`. If the additional argument is not provided, the program uses the standard B3/S23 transition rule.
+- S(eeds): B2/S, R(eplicator): B1357/S1357, H(ighlife): B36/S23
