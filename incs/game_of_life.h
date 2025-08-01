@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:18:53 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 01:27:35 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 13:31:52 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@
 
 #define STAR_COUNT 100
 
+#define MIN_GRID_X 80
+#define MIN_GRID_Y 80
+#define MAX_WIDTH 800
+#define MAX_HEIGHT 600
+
 #define ON "\033[0;97mX\033[0m"
 #define OFF "\033[0;34m.\033[0m"
 
@@ -37,6 +42,7 @@ typedef struct	s_star
 {
 	int32_t	x;
 	int32_t	y;
+	Color	color;
 }	t_star;
 
 typedef struct	s_state
@@ -51,7 +57,8 @@ typedef struct	s_state
 int32_t	check_valid_iterations(const char *iterations);
 void	check_size_and_validness(t_state *state, int32_t fd);
 void	allocate_memory(t_state *state, int32_t fd);
-void	initial_to_struct(t_state *state, int32_t fd);
+void	initial_to_struct(t_state *state, int32_t fd,
+		int32_t original_width, int32_t original_height);
 void	play_game(t_state *state, int32_t iterations);
 void	*ft_free(void **ptr);
 void	fd_to_start(int32_t fd);
@@ -62,9 +69,7 @@ void	free_array(t_state *state);
 void	free_map(uint64_t **map, int32_t i);
 void	ft_usleep(size_t ms);
 
-//		Raylib:
-
-void draw_state(t_state *state, t_star *stars, int32_t width, int32_t height);
+void draw_state(t_state *state, t_star *stars);
 void prepare_window(t_state *state);
 
 #endif /* GAME_OF_LIFE_H */

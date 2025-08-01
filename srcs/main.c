@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 11:59:18 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 00:34:18 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 13:04:28 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,15 @@ static void	elapsed_time(struct timeval *start, struct timeval *end)
 */
 static void	prepare_state(t_state *state, int32_t fd)
 {
+	int32_t	original_height;
+	int32_t	original_width;
+
 	check_size_and_validness(state, fd);
+	original_height = state->height;
+	original_width = state->width;
+	state->width = (state->width >= MIN_GRID_X) ? state->width : MIN_GRID_X;
+	state->height = (state->height >= MIN_GRID_Y) ? state->height : MIN_GRID_Y;
 	allocate_memory(state, fd);
-	initial_to_struct(state, fd);
+	initial_to_struct(state, fd, original_width, original_height);
 	close(fd);
 }

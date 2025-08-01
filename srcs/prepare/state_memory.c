@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:18:23 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 15:27:44 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 13:13:33 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,24 +56,41 @@ void	allocate_memory(t_state *state, int32_t fd)
 	}
 }
 
+static void	clear_whole_map(uint64_t **map, int32_t height, int32_t width)
+{
+	for (int32_t y = 0; y < height; ++y)
+	{
+		for (int32_t x = 0; x < width; ++x)
+		{
+			CLEAR_CELL(map, y, x);
+		}
+	}
+}
+
 /*
 	Saves the initial state to current_map 2D array.
 */
-void	initial_to_struct(t_state *state, int32_t fd)
+void	initial_to_struct(t_state *state, int32_t fd,
+		int32_t original_width, int32_t original_height)
 {
 	char	*line = get_next_line(fd);
-	int		x;
-	int		y = 0;
+	int32_t	offset_x = (original_width == (int32_t)state->width)
+			? 0 : (state->width - original_width) / 2;
+	int32_t	offset_y = (original_height == (int32_t)state->height)
+			? 0 : (state->height - original_height) / 2;
+	int32_t	x;
+	int32_t	y = offset_y;
 
+	clear_whole_map(state->current_map, state->height, state->width);
 	while (line)
 	{
-		x = -1;
-		while (line[++x])
+		x = offset_x;
+		int32_t pos = -1;
+		while (line[++pos])
 		{
-			if (line[x] == 'X')
+			if (line[pos] == 'X')
 				SET_CELL(state->current_map, y, x);
-			else
-				CLEAR_CELL(state->current_map, y, x);
+			x++;
 		}
 		y++;
 		ft_free((void **)&line);

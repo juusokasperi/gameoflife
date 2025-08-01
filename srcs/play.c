@@ -6,50 +6,41 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:21:38 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 01:28:27 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/01 13:24:39 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game_of_life.h"
 
 static int8_t	count_live_neighbors(int y, int x, t_state *state);
-static void 	calculate_next(t_state *state);
-
-static t_star*		generate_stars(t_star *stars, int32_t width, int32_t height)
-{
-	for (int i = 0; i < STAR_COUNT; ++i)
-	{
-		stars[i].x = GetRandomValue(0, width);
-		stars[i].y = GetRandomValue(0, height);
-	}
-	return (stars);
-}
+static void		calculate_next(t_state *state);
+static t_star*	generate_stars(t_star *stars);
 
 /*
 	Iterates through the game n times as specified by the user.
 */
 void	play_game(t_state *state, int32_t iterations)
 {
-	int32_t width = state->width * state->cell_size;
-	int32_t height = state->height * state->cell_size;
 	t_star stars[STAR_COUNT];
 
-	generate_stars(stars, width, height);
+	generate_stars(stars);
 	for (int32_t i = 0; i < iterations && !WindowShouldClose(); ++i)
 	{
 		calculate_next(state);
 		uint64_t **tmp = state->current_map;
 		state->current_map = state->next_map;
 		state->next_map = tmp;
-		draw_state(state, stars, width, height);
+		draw_state(state, stars);
 	}
+	printf("%d iterations done.\n", iterations);
 	while (!WindowShouldClose())
-		draw_state(state, stars, width, height);
+		draw_state(state, stars);
 }
 
 static int8_t	count_live_neighbors(int y, int x, t_state *state)
 {
 	int32_t	count = 0;
+
 	for (int32_t dy = -1; dy <= 1; ++dy)
 	{
 		for (int32_t dx = -1; dx <= 1; ++dx)
@@ -58,7 +49,8 @@ static int8_t	count_live_neighbors(int y, int x, t_state *state)
 				continue;
 			int32_t ny = y + dy;
 			int32_t nx = x + dx;
-			if (ny >= 0 && ny < (int32_t)state->height && nx >= 0 && nx < (int32_t)state->width)
+			if (ny >= 0 && ny < (int32_t)state->height
+				&& nx >= 0 && nx < (int32_t)state->width)
 				count += GET_CELL(state->current_map, ny, nx);
 		}
 	}
@@ -91,4 +83,18 @@ static void calculate_next(t_state *state)
 			}
 		}
 	}
+}
+
+static t_star*		generate_stars(t_star *stars)
+{
+	int32_t	screen_width = GetScreenWidth();
+	int32_t	screen_height = GetScreenHeight();
+
+	for (int i = 0; i < STAR_COUNT; ++i)
+	{
+		stars[i].x = GetRandomValue(0, screen_width);
+		stars[i].y = GetRandomValue(0, screen_height);
+		stars[i].color = (Color){ 245, 245, 245, GetRandomValue(20, 150) };
+	}
+	return (stars);
 }
