@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:18:53 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 16:04:10 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/02 17:49:09 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@
 #include <stdint.h>
 #include <sys/time.h>
 
-#define	GET_CELL(map, y, x) (((map)[(y)][(x) / 64] >> ((x) % 64)) & 1ULL)
-#define	SET_CELL(map, y, x) ((map)[(y)][(x) / 64] |= (1ULL << ((x) % 64)))
-#define	CLEAR_CELL(map, y, x) ((map)[(y)][(x) / 64] &= ~(1ULL << ((x) % 64)))
-#define TOGGLE_CELL(map, y, x) ((map[(y)][(x) / 64]) ^= (1ULL << ((x) % 64)))
+#define	GET_CELL(map, y, x, width) (((map)[((y) * (width) + (x)) / 64] >> (((y) * (width) + (x)) % 64)) & 1ULL)
+#define	SET_CELL(map, y, x, width) ((map)[((y) * (width) + (x)) / 64] |= (1ULL << (((y) * (width) + (x)) % 64)))
+#define	CLEAR_CELL(map, y, x, width) ((map)[((y) * (width) + (x)) / 64]  &= ~(1ULL << (((y) * (width) + (x)) % 64)))
+#define TOGGLE_CELL(map, y, x, width) ((map)[((y) * (width) + (x)) / 64] ^= (1ULL << (((y) * (width) + (x)) % 64)))
 
 typedef struct	s_state
 {
-	uint64_t **current_map;
-	uint64_t **next_map;
+	uint64_t *current_map;
+	uint64_t *next_map;
 	uint32_t width;
 	uint32_t height;
 }	t_state;
