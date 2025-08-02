@@ -67,6 +67,31 @@ static void	draw_background_grid(t_state *state, t_star *stars)
 	}
 }
 
+static void	print_instructions(int32_t screen_height, Font font)
+{
+	const char	*instructions =
+		"Pause iterations, Continue iterations, Next step\n"
+		"Click on cells to toggle ON/OFF while paused";
+	Vector2		text_pos = { 20, screen_height - 60 };
+	float		font_size = 18;
+	float		spacing = 0.75f;
+	Vector2		text_size = MeasureTextEx(font, instructions, font_size, spacing);
+	float		pad_x = 12.0f;
+	float		pad_y = 10.0f;
+
+	Rectangle	bg_rect = {
+		text_pos.x - pad_x,
+		text_pos.y - pad_y,
+		text_size.x + 2 * pad_x,
+		text_size.y + 2 * pad_y
+	};
+	DrawRectangleRoundedLinesEx(bg_rect, 0.3f, 12, 0.25f, RAYWHITE);
+	DrawRectangleRounded(bg_rect, 0.3f, 12, (Color){ 245, 245, 245, 25});
+	DrawTextEx(font, instructions, text_pos, font_size, spacing, RAYWHITE);
+	DrawTextEx(font, "_                 _                    _",
+		text_pos, font_size, spacing, RAYWHITE);
+}
+
 void draw_state(t_state *state, t_star *stars, bool key_toggle, Font font)
 {
 	int32_t screen_height = GetScreenHeight();
@@ -89,7 +114,7 @@ void draw_state(t_state *state, t_star *stars, bool key_toggle, Font font)
 		}
 	}
 	if (key_toggle)
-		DrawTextEx(font, "P: Pause iterations, C: Continue iterations\n" "Click on cells to toggle ON/OFF", (Vector2){ 10, screen_height - 50 }, 18, 1, YELLOW);
+		print_instructions(screen_height, font);
 	EndDrawing();
 }
 

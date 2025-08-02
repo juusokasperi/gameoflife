@@ -18,13 +18,29 @@ static char		count_live_neighbors(int y, int x, t_state *state);
 static void		calculate_next(t_state *state);
 static t_star*	generate_stars(t_star *stars);
 
+static void		check_keypress(t_keys *keys)
+{
+	static double	last_step_time = 0;
+	double			now = GetTime();
+	double			step_delay = 0.15;
+
+	if (IsKeyPressed(KEY_P))
+		keys->is_paused = true;
+	if (IsKeyPressed(KEY_C))
+		keys->is_paused = false;
+	if (IsKeyPressed(KEY_T))
+		keys->show_instructions = !keys->show_instructions;
+	if (IsKeyPressed(KEY_N)
+		|| (IsKeyDown(KEY_N) && now - last_step_time > step_delay))
+		keys->print_next_step = true;
+}
+
 /*
 	Iterates through the game n times as specified by the user.
 */
 void	play_game(t_state *state, int32_t iterations)
 {
-	bool	keys_toggle = false;
-	bool	is_paused = false;
+	t_keys	keys = { false };
 	t_star	stars[STAR_COUNT];
 	int32_t	i = 0;
 	Font inconsolata = LoadFont("./font/inconsolata.ttf");
@@ -32,22 +48,19 @@ void	play_game(t_state *state, int32_t iterations)
 	generate_stars(stars);
 	while (!WindowShouldClose())
 	{
-		if (IsKeyPressed(KEY_P))
-			is_paused = true;
-		if (IsKeyPressed(KEY_C))
-			is_paused = false;
-		if (IsKeyReleased(KEY_T))
-			keys_toggle = !keys_toggle;
-		draw_state(state, stars, keys_toggle, inconsolata);
-		if (is_paused)
+		check_keypress(&keys);
+		draw_state(state, stars, keys.show_instructions, inconsolata);
+		if (keys.is_paused || i >= iterations)
 			toggle_cells(state);
-		if (!is_paused && i < iterations)
+		if ((!keys.is_paused && i < iterations) || keys.print_next_step)
 		{
 			calculate_next(state);
 			swap_maps(state);
 			i++;
+			if (keys.print_next_step)
+				keys.print_next_step = false;
 		}
-		else if (!is_paused && i == iterations)
+		else if (!keys.is_paused && i == iterations)
 		{
 			printf("%d iterations done.\n", iterations);
 			i++;

@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:18:53 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/02 17:43:43 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/02 21:03:35 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,14 @@ typedef struct	s_star
 	int32_t	y;
 	Color	color;
 }	t_star;
+
+typedef struct s_keys
+{
+	bool	is_paused;
+	bool	show_instructions;
+	bool	print_next_step;
+}	t_keys;
+
 
 typedef struct	s_state
 {
