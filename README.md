@@ -8,7 +8,13 @@
 - Implemented in C
 - Running `make` builds the binary `./life`, `make optimize` builds `./life_optimized` that includes compiler optimization flags.
 - Usage:
-	`./life(_optimized) <initial_state> <iterations>`
+	- `./life(_optimized) <initial_state> <iterations>` OR:
+	- `./life(_optimized) <initial_state> <iterations> <cell_born> <cell_alive>`
+	- If the optional `<cell_born>` and `<cell_alive>` arguments are not provided, the program uses the B3/S23 transition rule.
+- Some common transition rules;
+	- Seeds: B2/S
+	- Replicator: B1357/S1357
+	- Highlife: B36/S23
 - A `<initial_state>` file can contain only characters `.` and `X`, for OFF and ON cells.
 
 ## Branches
@@ -20,8 +26,3 @@
 
 `raylib-print`
 - Similar to print-iterations, but uses the `Raylib` graphical library to create a nicer output.
-- This branch also supports different transition rules - the binary accepts two more argument, `./life(_optimized) <initial_state> <iterations> <cell_born> <cell_alive>`. If the additional arguments are not provided, the program uses the B3/S23 transition rule.
-- Some common transition rules;
-	- Seeds: B2/S
-	- Replicator: B1357/S1357
-	- Highlife: B36/S23

@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:34:04 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/07/31 18:19:18 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/02 17:58:39 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,15 @@
 void	invalid_format(const char *binary_name)
 {
 	const char *usage = "Usage: ";
-	const char *state_iterations = " <initial_state> <iterations>\n";
+	const char *state_iterations = " <initial_state> <iterations> <cell born> <cell alive>\n";
+	const char *explanation = "<cell born/alive> specifies which amount of \
+		neighbours results in the birth/staying aliveness of a cell (1-8)\n";
+	const char *example = "F.ex. <initial_state> <iterations> 3 23\n";
 	write(STDERR_FILENO, usage, strlen(usage));
 	write(STDERR_FILENO, binary_name, strlen(binary_name));
 	write(STDERR_FILENO, state_iterations, strlen(state_iterations));
+	write(STDERR_FILENO, explanation, strlen(explanation));
+	write(STDERR_FILENO, example, strlen(example));
 	exit(1);
 }
 
@@ -71,12 +76,32 @@ int32_t	check_valid_iterations(const char *iterations)
 	return (value);
 }
 
-void	free_map(uint64_t **map, int32_t i)
+void	check_valid_ruleset(const char *input, char *cell)
 {
-	while (i > 0)
+	if (input[0] == '\0')
+		return;
+	int32_t	count[9] = { 0 };
+	for (size_t i = 0; input[i] != '\0'; ++i)
 	{
-		free(map[--i]);
-		map[i] = NULL;
+		if (!strchr("012345678", input[i]))
+		{
+			const char *err = "Error: Invalid input in ruleset (0-8)\n";
+			write(STDERR_FILENO, err, strlen(err));
+			exit(1);
+		}
+		count[input[i] - '0']++;
 	}
-	free(map);
+	int32_t numbers_added = 0;
+	for (size_t i = 0; i < 9; ++i)
+	{
+		if (count[i] > 1)
+		{
+			const char *err = "Error: Invalid input in ruleset"
+				" (contains multiple same digits)\n";
+			write(STDERR_FILENO, err, strlen(err));
+			exit(1);
+		}
+		if (count[i] == 1)
+			cell[numbers_added++] = i + '0';
+	}
 }
