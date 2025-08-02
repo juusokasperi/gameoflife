@@ -5,7 +5,7 @@
 
 ---
 
-- Implemented in C
+- Implemented in C as part of a 2-day Rush project at Hive Helsinki school.
 - Running `make` builds the binary `./life`, `make optimize` builds `./life_optimized` that includes compiler optimization flags.
 - Usage:
 	- `./life(_optimized) <initial_state> <iterations>` OR:
@@ -26,3 +26,12 @@
 
 `raylib-print`
 - Similar to print-iterations, but uses the `Raylib` graphical library to create a nicer output.
+- Keys:
+
+| Key          | Function                                                     |
+|--------------|--------------------------------------------------------------|
+| `P`          | Pause iterations                                             |
+| `C`          | Continue iterations                                          |
+| `N`          | Next iteration (can be held down)                            |
+| `T`          | Show keyboard commands (these)                               |
+| `Left Click` | Toggle cells on/off when paused or at the end of iterations. |
