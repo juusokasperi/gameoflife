@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:34:04 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 17:31:43 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/02 17:14:59 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,4 @@ void	check_valid_ruleset(const char *input, char *cell)
 		if (count[i] == 1)
 			cell[numbers_added++] = i + '0';
 	}
-}
-
-void	free_map(uint64_t **map, int32_t i)
-{
-	while (i > 0)
-	{
-		free(map[--i]);
-		map[i] = NULL;
-	}
-	free(map);
 }

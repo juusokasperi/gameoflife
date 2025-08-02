@@ -58,7 +58,10 @@ void	play_game(t_state *state, int32_t iterations)
 
 static char	count_live_neighbors(int y, int x, t_state *state)
 {
-	int32_t	count = 0;
+	int32_t		count = 0;
+	int32_t		width = state->width;
+	int32_t		height = state->height;
+	uint64_t	*current_map = state->current_map;
 
 	for (int32_t dy = -1; dy <= 1; ++dy)
 	{
@@ -68,9 +71,9 @@ static char	count_live_neighbors(int y, int x, t_state *state)
 				continue;
 			int32_t ny = y + dy;
 			int32_t nx = x + dx;
-			if (ny >= 0 && ny < (int32_t)state->height
-				&& nx >= 0 && nx < (int32_t)state->width)
-				count += GET_CELL(state->current_map, ny, nx);
+			if (ny >= 0 && ny < height
+				&& nx >= 0 && nx < width)
+				count += GET_CELL(current_map, ny, nx, width);
 		}
 	}
 	return (count + '0');
@@ -78,27 +81,29 @@ static char	count_live_neighbors(int y, int x, t_state *state)
 
 static void calculate_next(t_state *state)
 {
-	uint64_t	**current_map = state->current_map;
-	uint64_t	**next_map = state->next_map;
+	uint64_t	*current_map = state->current_map;
+	uint64_t	*next_map = state->next_map;
+	uint32_t	width = state->width;
+	uint32_t	height = state->height;
 
-	for (uint32_t y = 0; y < state->height; ++y)
+	for (uint32_t y = 0; y < height; ++y)
 	{
-		for (uint32_t x = 0; x < state->width; ++x)
+		for (uint32_t x = 0; x < width; ++x)
 		{
 			char neighbors = count_live_neighbors(y, x, state);
-			if (GET_CELL(current_map, y, x))
+			if (GET_CELL(current_map, y, x, width))
 			{
 				if (strchr(state->cell_alive, neighbors))
-					SET_CELL(next_map, y, x);
+					SET_CELL(next_map, y, x, width);
 				else
-					CLEAR_CELL(next_map, y, x);
+					CLEAR_CELL(next_map, y, x, width);
 			}
 			else
 			{
 				if (strchr(state->cell_born, neighbors))
-					SET_CELL(next_map, y, x);
+					SET_CELL(next_map, y, x, width);
 				else
-					CLEAR_CELL(next_map, y, x);
+					CLEAR_CELL(next_map, y, x, width);
 			}
 		}
 	}

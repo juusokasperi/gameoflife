@@ -18,10 +18,8 @@ SRCS =	main.c							\
 		prepare/state_memory.c			\
 		prepare/state_utils.c			\
 		utils/fd_to_start.c				\
-		utils/free_array.c				\
 		utils/ft_free.c					\
 		utils/get_next_line.c			\
-		utils/print_state.c				\
 		utils/ft_usleep.c
 
 SRCS_DIR = srcs/

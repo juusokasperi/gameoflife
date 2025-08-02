@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:18:23 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 13:13:33 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/02 17:38:10 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,55 +14,31 @@
 #include "get_next_line.h"
 
 /*
-	Allocates memory for the 2D arrays
+	Allocates memory for the array
 */
 void	allocate_memory(t_state *state, int32_t fd)
 {
-	size_t	uints_per_row = (state->width + 63) / 64;
-	const char *err = "Error: Malloc error in allocate_memory().\n";
+	size_t		uints_per_map = (state->width * state->height + 63) / 64;
+	uint64_t	*map = calloc(uints_per_map * 2, sizeof(uint64_t));
 
-	state->current_map = calloc(state->height, sizeof(uint64_t*));
-	state->next_map = calloc(state->height, sizeof(uint64_t*));
-	if (state->current_map == NULL || state->next_map == NULL)
+	if (map == NULL)
 	{
-		if (state->current_map)
-			free(state->current_map);
-		if (state->next_map)
-			free(state->next_map);
+		const char	*err = "Error: Malloc error in allocate_memory().\n";
 		close(fd);
 		write(STDERR_FILENO, err, strlen(err));
 		exit(1);
 	}
-	for (size_t i = 0; i < state->height; ++i)
-	{
-		state->current_map[i] = calloc(uints_per_row, sizeof(uint64_t));
-		if (state->current_map[i] == NULL)
-		{
-			free_map(state->current_map, i);
-			free_map(state->next_map, i);
-			close(fd);
-			write(STDERR_FILENO, err, strlen(err));
-			exit(1);
-		}
-		state->next_map[i] = calloc(uints_per_row, sizeof(uint64_t));
-		if (state->next_map[i] == NULL)
-		{
-			free_map(state->current_map, i + 1);
-			free_map(state->next_map, i);
-			close(fd);
-			write(STDERR_FILENO, err, strlen(err));
-			exit(1);
-		}
-	}
+	state->current_map = map;
+	state->next_map = map + uints_per_map;
 }
 
-static void	clear_whole_map(uint64_t **map, int32_t height, int32_t width)
+static void	clear_whole_map(uint64_t *map, int32_t height, int32_t width)
 {
 	for (int32_t y = 0; y < height; ++y)
 	{
 		for (int32_t x = 0; x < width; ++x)
 		{
-			CLEAR_CELL(map, y, x);
+			CLEAR_CELL(map, y, x, width);
 		}
 	}
 }
@@ -89,7 +65,7 @@ void	initial_to_struct(t_state *state, int32_t fd,
 		while (line[++pos])
 		{
 			if (line[pos] == 'X')
-				SET_CELL(state->current_map, y, x);
+				SET_CELL(state->current_map, y, x, state->width);
 			x++;
 		}
 		y++;

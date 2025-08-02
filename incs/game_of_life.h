@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 12:18:53 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/02 01:28:35 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/02 17:43:43 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@
 #include <sys/time.h>
 #include "raylib.h"
 
-#define	GET_CELL(map, y, x) (((map)[(y)][(x) / 64] >> ((x) % 64)) & 1ULL)
-#define	SET_CELL(map, y, x) ((map)[(y)][(x) / 64] |= (1ULL << ((x) % 64)))
-#define	CLEAR_CELL(map, y, x) ((map)[(y)][(x) / 64] &= ~(1ULL << ((x) % 64)))
-#define TOGGLE_CELL(map, y, x) ((map[(y)][(x) / 64]) ^= (1ULL << ((x) % 64)))
+#define	GET_CELL(map, y, x, width) (((map)[((y) * (width) + (x)) / 64] >> (((y) * (width) + (x)) % 64)) & 1ULL)
+#define	SET_CELL(map, y, x, width) ((map)[((y) * (width) + (x)) / 64] |= (1ULL << (((y) * (width) + (x)) % 64)))
+#define	CLEAR_CELL(map, y, x, width) ((map)[((y) * (width) + (x)) / 64]  &= ~(1ULL << (((y) * (width) + (x)) % 64)))
+#define TOGGLE_CELL(map, y, x, width) ((map)[((y) * (width) + (x)) / 64] ^= (1ULL << (((y) * (width) + (x)) % 64)))
 
 #define STAR_COUNT 100
 
@@ -47,8 +47,8 @@ typedef struct	s_star
 
 typedef struct	s_state
 {
-	uint64_t	**current_map;
-	uint64_t	**next_map;
+	uint64_t	*current_map;
+	uint64_t	*next_map;
 	uint32_t	width;
 	uint32_t	height;
 	uint32_t	cell_size;
@@ -66,11 +66,9 @@ void	play_game(t_state *state, int32_t iterations);
 
 void	*ft_free(void **ptr);
 void	fd_to_start(int32_t fd);
-void	print_state(t_state *state);
 void	invalid_format(const char *binary_name);
 int		check_file_open(const char *initial_state);
 void	free_array(t_state *state);
-void	free_map(uint64_t **map, int32_t i);
 void	ft_usleep(size_t ms);
 
 void draw_state(t_state *state, t_star *stars, bool key_toggle, Font font);

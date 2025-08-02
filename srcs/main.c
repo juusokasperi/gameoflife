@@ -6,7 +6,7 @@
 /*   By: jrinta- <jrinta-@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 11:59:18 by jrinta-           #+#    #+#             */
-/*   Updated: 2025/08/01 17:30:17 by jrinta-          ###   ########.fr       */
+/*   Updated: 2025/08/02 17:37:04 by jrinta-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void	prepare_state(t_state *state, int32_t fd);
 static void	elapsed_time(struct timeval *start, struct timeval *end);
 static void	basic_validation(int argc, char **argv, int32_t *fd,
 		int32_t *iterations, t_state *state);
+static void	free_map(t_state *state);
 
 int	main(int argc, char **argv)
 {
@@ -29,7 +30,7 @@ int	main(int argc, char **argv)
 	prepare_state(&state, fd);
 	prepare_window(&state);
 	play_game(&state, iterations);
-	free_array(&state);
+	free_map(&state);
 	gettimeofday(&end, NULL);
 	CloseWindow();
 	elapsed_time(&start, &end);
@@ -89,4 +90,15 @@ static void	prepare_state(t_state *state, int32_t fd)
 	allocate_memory(state, fd);
 	initial_to_struct(state, fd, original_width, original_height);
 	close(fd);
+}
+
+static void	free_map(t_state *state)
+{
+	uint64_t	*map;
+
+	map = (state->current_map < state->next_map)
+		? state->current_map : state->next_map;
+	free(map);
+	state->current_map = NULL;
+	state->next_map = NULL;
 }

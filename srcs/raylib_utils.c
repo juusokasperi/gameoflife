@@ -41,12 +41,11 @@ void prepare_window(t_state *state)
 		state->cell_born, state->cell_alive);
 }
 
-void draw_state(t_state *state, t_star *stars, bool key_toggle, Font font)
+static void	draw_background_grid(t_state *state, t_star *stars)
 {
 	int32_t	screen_width = GetScreenWidth();
 	int32_t screen_height = GetScreenHeight();
 
-	BeginDrawing();
 	DrawRectangleGradientV(0, 0, screen_width, screen_height,
 		(Color){ 10, 10, 40, 255 }, BLACK);
 
@@ -66,7 +65,14 @@ void draw_state(t_state *state, t_star *stars, bool key_toggle, Font font)
 		DrawLine(0, y * state->cell_size,
 			screen_width, y * state->cell_size, grid_color);
 	}
+}
 
+void draw_state(t_state *state, t_star *stars, bool key_toggle, Font font)
+{
+	int32_t screen_height = GetScreenHeight();
+
+	BeginDrawing();
+	draw_background_grid(state, stars);
 	Color glow_color = (Color){ 200, 200, 50, 20 };
 	for (uint32_t y = 0; y < state->height; ++y)
 	{
@@ -75,7 +81,7 @@ void draw_state(t_state *state, t_star *stars, bool key_toggle, Font font)
 			int32_t	center_x = (x * state->cell_size) + state->cell_size / 2;
 			int32_t center_y = (y * state->cell_size) + state->cell_size / 2;
 			float radius = (state->cell_size - 2) / 2;
-			if (GET_CELL(state->current_map, y, x))
+			if (GET_CELL(state->current_map, y, x, state->width))
 			{
 				DrawCircle(center_x, center_y, radius + 4, glow_color);
 				DrawCircle(center_x, center_y, radius, RAYWHITE);
@@ -95,12 +101,12 @@ void	toggle_cells(t_state *state)
 	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)
 		&& grid_x >= 0 && grid_x < (int32_t)state->width
 		&& grid_y >= 0 && grid_y < (int32_t)state->height)
-		TOGGLE_CELL(state->current_map, grid_y, grid_x);
+		TOGGLE_CELL(state->current_map, grid_y, grid_x, state->width);
 }
 
 void	swap_maps(t_state *state)
 {
-	uint64_t **tmp = state->current_map;
+	uint64_t *tmp = state->current_map;
 	state->current_map = state->next_map;
 	state->next_map = tmp;
 }
